@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/buttons">
+        <file alias="green">images/green.png</file>
+        <file alias="red">images/red.png</file>
+        <file alias="purple">images/purble.png</file>
+        <file alias="yellow">images/yellow.png</file>
+    </qresource>
+    <qresource prefix="/diverse">
+        <file alias="update">images/update.ico</file>
+        <file alias="StateON">images/on.ico</file>
+        <file alias="StateDisconnected">images/disconnected.ico</file>
+        <file alias="StateStandby">images/standby.ico</file>
+        <file alias="mute">images/mute.ico</file>
+        <file alias="sleep2">images/sleep.ico</file>
+        <file alias="leaf">images/Graphicloads-Food-Drink-Leaf.ico</file>
+        <file alias="sleep">images/sleep2.ico</file>
+        <file alias="main">images/Double-J-Sound.ico</file>
+    </qresource>
+</RCC>
