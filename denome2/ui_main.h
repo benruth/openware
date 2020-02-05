@@ -7,9 +7,11 @@
 #include <QToolButton>
 #include <QSlider>
 #include <QElapsedTimer>
+#include <QSpacerItem>
 
 #include "network/denonet/lib/Denonet.h"
 #include "ui/ChannelSlider.h"
+
 
 #define DELAY_MS_PER_TICK 200 //ms
 #define DELAY_SECONDS(x) (static_cast<int>(x*1000/DELAY_MS_PER_TICK))
@@ -116,6 +118,8 @@ private slots:
      */
     void on_delayTimer();
 
+    void on_actionChangeChannelView_triggered();
+
 private:
     Ui::ui_main *ui;
     Denonet com;
@@ -136,15 +140,6 @@ private:
     };
     int delayTicks[DELAY_NUMS];
 
-    enum SliderObject {
-        SL_SUBWOOFER,
-        SL_BASS,
-        SL_TREBLE,
-        SL_VOLUME,
-        SLIDER_NUM
-    };
-    bool sliderActionTriggered[SLIDER_NUM];
-    bool incommingChanges[SLIDER_NUM];
 
 
     int sleepSelected;
@@ -160,6 +155,15 @@ private:
     Qt::Orientation ui_sliderOrientation;
 
 
+    enum SliderObject {
+        SL_SUBWOOFER,
+        SL_BASS,
+        SL_TREBLE,
+        SL_VOLUME,
+        SLIDER_NUM
+    };
+    bool sliderActionTriggered[SLIDER_NUM];
+    bool incommingChanges[SLIDER_NUM];
 
 
     int connectDenon(QString host);
@@ -175,6 +179,7 @@ private:
     void resetSleepSetRecently();
 
 
+    int channelStretchedRow, channelStretchedColumn;
     QGridLayout* channelLayout;
     QList<ChannelSlider*> uiChannelSlider;
 

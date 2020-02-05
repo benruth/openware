@@ -13,6 +13,8 @@ ChannelSlider::ChannelSlider(QWidget* parent, QGridLayout* grid, ChannelVolumeDa
 
     orientation = o;
     Qt::Orientation sliderOrientation;
+    Qt::Alignment sliderAlignment;
+
 
     if(Qt::Horizontal == o)
     {
@@ -23,6 +25,7 @@ ChannelSlider::ChannelSlider(QWidget* parent, QGridLayout* grid, ChannelVolumeDa
         cols[2] = 2;
         layout->setRowStretch(1,0);
         layout->setColumnStretch(1,1);
+        sliderAlignment = Qt::AlignVCenter;
 
     }else{
         sliderOrientation = Qt::Vertical;
@@ -32,6 +35,7 @@ ChannelSlider::ChannelSlider(QWidget* parent, QGridLayout* grid, ChannelVolumeDa
         rows[2] = 2;
         layout->setColumnStretch(1,0);
         layout->setRowStretch(1,1);
+        sliderAlignment = Qt::AlignHCenter;
     }
 
     label = new QLabel("Text", parent);
@@ -47,6 +51,7 @@ ChannelSlider::ChannelSlider(QWidget* parent, QGridLayout* grid, ChannelVolumeDa
     slider->setTickInterval(2);
     slider->setTickPosition(QSlider::TicksAbove); //Above = TicksLeft
     slider->setPageStep(2);
+    slider->setContextMenuPolicy(Qt::CustomContextMenu);
 
     lineEdit->setText("+ 0.0 dB");
     lineEdit->setMinimumWidth(55);
@@ -55,17 +60,19 @@ ChannelSlider::ChannelSlider(QWidget* parent, QGridLayout* grid, ChannelVolumeDa
 
 
     layout->addWidget(label, rows[0], cols[0]);
-    layout->addWidget(slider, rows[1], cols[1]);
+    layout->addWidget(slider, rows[1], cols[1], sliderAlignment);
     layout->addWidget(lineEdit, rows[2], cols[2]);
 
     connect(slider, SIGNAL(valueChanged(int)), this, SLOT(on_slider_valueChanged(int)));
     connect(slider, SIGNAL(actionTriggered(int)), this, SLOT(on_slider_actionTriggered(int)));
+    connect(slider, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(on_slider_customContextMenu(const QPoint&)));
 }
 
 ChannelSlider::~ChannelSlider()
 {
     disconnect(slider, SIGNAL(valueChanged(int)), this, SLOT(on_slider_valueChanged(int)));
     disconnect(slider, SIGNAL(actionTriggered(int)), this, SLOT(on_slider_actionTriggered(int)));
+    disconnect(slider, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(on_slider_customContextMenu(const QPoint&)));
 
     layout->removeWidget(label);
     layout->removeWidget(slider);
@@ -111,9 +118,6 @@ void ChannelSlider::reorderItems(Qt::Orientation o)
     layout->addWidget(label, rows[0], cols[0]);
     layout->addWidget(slider, rows[1], cols[1]);
     layout->addWidget(lineEdit, rows[2], cols[2]);
-
-
-
 }
 
 void ChannelSlider::changeVolume(double v)
@@ -137,4 +141,13 @@ void ChannelSlider::on_slider_valueChanged(int value)
 void ChannelSlider::on_slider_actionTriggered(int /*action*/)
 {
     actionWasTriggered = true;
+}
+
+void ChannelSlider::on_slider_customContextMenu(const QPoint &pos)
+{
+    if(0 == slider->value() )
+        return;
+
+    slider->setValue(0);
+    com->setChannelVolume(type.c, 0.0);
 }

@@ -23,6 +23,9 @@ ui_main::ui_main(QWidget *parent)
             this, SLOT(on_delayTimer()));
 
     sleepSetRecently = false;
+    channelStretchedColumn = -1;
+    channelStretchedRow = -1;
+
 
 
 
@@ -503,6 +506,11 @@ void ui_main::uiCreateChannel()
     int count = info.size();
     ChannelSlider * item;
 
+    if(channelStretchedRow >= 0)
+        channelLayout->setRowStretch(channelStretchedRow, 0);
+
+    if(channelStretchedColumn >= 0)
+        channelLayout->setColumnStretch(channelStretchedColumn, 0);
 
     // remove existing slider
     for(int i = 0; i<uiChannelSlider.size(); i++)
@@ -511,15 +519,23 @@ void ui_main::uiCreateChannel()
 
 
 
+
     for(int i =0; i<count; i++)
     {
         ChannelVolumeData data =  info[i];
         item = new ChannelSlider(ui->dwChannelContents, channelLayout, data, ui_sliderOrientation, &com);
         uiChannelSlider.append(item);
-
     }
 
+    if(ui_sliderOrientation == Qt::Vertical)
+    {
+        channelStretchedColumn = channelLayout->columnCount();
+        channelLayout->setColumnStretch(channelStretchedColumn, 1);
+    }else{
 
+        channelStretchedRow = channelLayout->rowCount();
+        channelLayout->setRowStretch(channelStretchedRow, 1);
+    }
 
 }
 
@@ -817,4 +833,14 @@ void ui_main::on_dwChannel_dockLocationChanged(Qt::DockWidgetArea area)
     if(area & (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea))
     {
     }
+}
+
+void ui_main::on_actionChangeChannelView_triggered()
+{
+    if(ui_sliderOrientation == Qt::Vertical)
+        ui_sliderOrientation = Qt::Horizontal;
+    else
+        ui_sliderOrientation = Qt::Vertical;
+
+    uiCreateChannel();
 }

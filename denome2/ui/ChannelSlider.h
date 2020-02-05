@@ -27,6 +27,7 @@ public:
 public slots:
     void on_slider_valueChanged(int value);
     void on_slider_actionTriggered(int action);
+    void on_slider_customContextMenu(const QPoint &pos);
 
 private:
     ChannelVolumeData type;

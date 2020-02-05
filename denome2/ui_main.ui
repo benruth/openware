@@ -265,6 +265,8 @@
     </property>
     <addaction name="actionAudio"/>
     <addaction name="actionChannel"/>
+    <addaction name="separator"/>
+    <addaction name="actionChangeChannelView"/>
    </widget>
    <addaction name="menuEinstellungen"/>
    <addaction name="menuAnsicht"/>
@@ -651,6 +653,11 @@
   <action name="actionDimOff">
    <property name="text">
     <string>Aus</string>
+   </property>
+  </action>
+  <action name="actionChangeChannelView">
+   <property name="text">
+    <string>Kanäle: Ansicht drehen</string>
    </property>
   </action>
  </widget>
