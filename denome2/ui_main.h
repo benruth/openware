@@ -9,6 +9,7 @@
 #include <QElapsedTimer>
 
 #include "network/denonet/lib/Denonet.h"
+#include "ui/ChannelSlider.h"
 
 #define DELAY_MS_PER_TICK 200 //ms
 #define DELAY_SECONDS(x) (static_cast<int>(x*1000/DELAY_MS_PER_TICK))
@@ -33,6 +34,7 @@ public slots:
     void onMaxVolumeChanged(double v);
     void onStatusChanged(DenonState s);
     void onChannelVolumeChanged(ChannelVolumeCompleteInfo info);
+    void onSingleChannelChanged(ChannelVolumeData data);
     void onToneControlChanged(ToneSettings s);
     void onSignalInputChanged(SignalInputs si);
     void onSubwooferStereoModeChanged(bool active);
@@ -94,8 +96,6 @@ private slots:
 
     void on_actionSleep_triggered();
 
-    void on_delayTimer();
-
     void on_actionDimDark_triggered();
 
     void on_actionDimDim_triggered();
@@ -103,6 +103,18 @@ private slots:
     void on_actionDimBright_triggered();
 
     void on_actionDimOff_triggered();
+
+    void on_dwChannel_dockLocationChanged(Qt::DockWidgetArea area);
+
+    /**
+     * @brief on_delayTimer Tick-Timer
+     * see also DelayObjects and delayTicks.
+     * some Events need delays.
+     * configurable by increasing delayTicks.
+     * delayTicks will be decreased. Event is activated
+     *  when counter is set to zero
+     */
+    void on_delayTimer();
 
 private:
     Ui::ui_main *ui;
@@ -140,14 +152,12 @@ private:
 
 
 
+
     /// UI-Elemente
     QToolButton ui_Power;
     QInputDialog ui_hostInputDialog;
     QLabel ui_sleepStatus;
-
-
-
-
+    Qt::Orientation ui_sliderOrientation;
 
 
 
@@ -163,6 +173,15 @@ private:
 
     void setSleepSetRecently();
     void resetSleepSetRecently();
+
+
+    QGridLayout* channelLayout;
+    QList<ChannelSlider*> uiChannelSlider;
+
+    void uiCreateChannel();
+
+    void changeChannelValue(ChannelVolumeData &data);
+
 
 
 

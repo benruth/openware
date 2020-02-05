@@ -80,6 +80,20 @@ ChannelVolumeCompleteInfo &ChannelVolumeCompleteInfo::operator=(const ChannelVol
     return *this;
 }
 
+bool ChannelVolumeCompleteInfo::operator==(const ChannelVolumeCompleteInfo &info)
+{
+    if(info.channel.size() != this->channel.size())
+        return false;
+
+    for(int i=0; i<channel.size(); i++)
+    {
+        if(info.channel.at(i).c != this->channel.at(i).c)
+            return false;
+    }
+
+    return true;
+}
+
 int ChannelVolumeCompleteInfo::indexOf(ChannelVolume c)
 {
     for(int i=0; i<channel.size(); i++)

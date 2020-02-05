@@ -60,6 +60,10 @@ ui_main::ui_main(QWidget *parent)
     ui->actionDimBright->setCheckable(true);
 
 
+
+
+
+
     onDimmerStateChanged(com.getDimmerState());
 
 
@@ -94,14 +98,26 @@ ui_main::ui_main(QWidget *parent)
 
 
     /// Dockwidget management
+    // Tone Control Dock
+    bool setToneCtrlVisible = false;
+    ui->dwSoundSettings->setVisible(setToneCtrlVisible);
     ui->actionAudio->setCheckable(true);
-    ui->actionAudio->setChecked(true);
+    ui->actionAudio->setChecked(setToneCtrlVisible);
     connect(ui->actionAudio, SIGNAL(triggered(bool)), ui->dwSoundSettings, SLOT(setVisible(bool)));
     connect(ui->dwSoundSettings, SIGNAL(visibilityChanged(bool)), ui->actionAudio, SLOT(setChecked(bool)));
 
+    // Channel-Settings
+    ui->dwChannel->setFloating(false);
+    bool setChannelCtrlVisible = true;
+    ui->dwChannel->setVisible(setChannelCtrlVisible);
+    ui->actionChannel->setCheckable(true);
+    ui->actionChannel->setChecked(setChannelCtrlVisible);
+    connect(ui->actionChannel, SIGNAL(triggered(bool)), ui->dwChannel, SLOT(setVisible(bool)));
+    connect(ui->dwChannel, SIGNAL(visibilityChanged(bool)), ui->actionChannel, SLOT(setChecked(bool)));
 
 
-
+    channelLayout = new QGridLayout(ui->dwChannelContents);
+    ui->dwChannelContents->setLayout(channelLayout);
 
 
 
@@ -118,12 +134,15 @@ ui_main::ui_main(QWidget *parent)
     connect(&ui_hostInputDialog, SIGNAL(accepted()), this, SLOT(onHostInputDialogEnter()));
 
 
-
+    ui_sliderOrientation = Qt::Horizontal;
 
 }
 
 ui_main::~ui_main()
 {
+    for(int i = 0; i<uiChannelSlider.size(); i++)
+        delete uiChannelSlider.at(i);
+
     delete ui;
 }
 
@@ -173,6 +192,14 @@ void ui_main::onChannelVolumeChanged(ChannelVolumeCompleteInfo info)
             ui->hsSubwoofer->setValue(step);
         }
     }
+
+    uiCreateChannel();
+
+}
+
+void ui_main::onSingleChannelChanged(ChannelVolumeData data)
+{
+    changeChannelValue(data);
 }
 
 void ui_main::onToneControlChanged(ToneSettings s)
@@ -354,6 +381,8 @@ int ui_main::connectDenon(QString host)
             this, SLOT(onToneControlChanged(ToneSettings)));
     connect(&com, SIGNAL(channelVolumeChanged(ChannelVolumeCompleteInfo)),
             this, SLOT(onChannelVolumeChanged(ChannelVolumeCompleteInfo)));
+    connect(&com, SIGNAL(singleChannelChanged(ChannelVolumeData)),
+            this, SLOT(onSingleChannelChanged(ChannelVolumeData)));
     connect(&com, SIGNAL(subwStereoModeChanged(bool)),
             this, SLOT(onSubwooferStereoModeChanged(bool)));
     connect(&com, SIGNAL(muteChanged(bool)),
@@ -388,6 +417,8 @@ void ui_main::closeEvent(QCloseEvent *event)
                 this, SLOT(onToneControlChanged(ToneSettings)));
         disconnect(&com, SIGNAL(channelVolumeChanged(ChannelVolumeCompleteInfo)),
                 this, SLOT(onChannelVolumeChanged(ChannelVolumeCompleteInfo)));
+        disconnect(&com, SIGNAL(singleChannelChanged(ChannelVolumeData)),
+                this, SLOT(onSingleChannelChanged(ChannelVolumeData)));
         disconnect(&com, SIGNAL(subwStereoModeChanged(bool)),
                 this, SLOT(onSubwooferStereoModeChanged(bool)));
         disconnect(&com, SIGNAL(muteChanged(bool)),
@@ -463,6 +494,55 @@ void ui_main::resetSleepSetRecently()
 {
     sleepSetRecently = false;
     delayTicks[DL_SLEEP_SET_TIMER] = DELAY_SECONDS(0);
+}
+
+void ui_main::uiCreateChannel()
+{
+    ChannelVolumeCompleteInfo info = com.getCompleteChannelInfo();
+
+    int count = info.size();
+    ChannelSlider * item;
+
+
+    // remove existing slider
+    for(int i = 0; i<uiChannelSlider.size(); i++)
+        delete uiChannelSlider.at(i);
+    uiChannelSlider.clear();
+
+
+
+    for(int i =0; i<count; i++)
+    {
+        ChannelVolumeData data =  info[i];
+        item = new ChannelSlider(ui->dwChannelContents, channelLayout, data, ui_sliderOrientation, &com);
+        uiChannelSlider.append(item);
+
+    }
+
+
+
+}
+
+void ui_main::changeChannelValue(ChannelVolumeData &data)
+{
+    ChannelSlider *c = nullptr;
+
+    // search channel slider
+    for(int i = 0; i<uiChannelSlider.size(); i++)
+    {
+        if(uiChannelSlider.at(i)->getChannel() == data.c)
+        {
+            c = uiChannelSlider.at(i);
+            break;
+        }
+    }
+
+    if(c != nullptr)
+    {
+        c->changeVolume(data.value);
+    }else{
+        qDebug() << "ChannelValue changed but no slider";
+    }
 }
 
 
@@ -726,4 +806,15 @@ void ui_main::on_actionDimBright_triggered()
 void ui_main::on_actionDimOff_triggered()
 {
     com.setDimmerState(DimmerState::DIM_OFF);
+}
+
+void ui_main::on_dwChannel_dockLocationChanged(Qt::DockWidgetArea area)
+{
+    if(area & (Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea))
+    {
+    }
+
+    if(area & (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea))
+    {
+    }
 }

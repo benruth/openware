@@ -22,6 +22,7 @@ SOURCES += \
     main.cpp \
     network/denonet/lib/ChannelVolumeCompleteInfo.cpp \
     network/denonet/lib/Denonet.cpp \
+    ui/ChannelSlider.cpp \
     ui_main.cpp
 
 HEADERS += \
@@ -30,6 +31,7 @@ HEADERS += \
     network/denonet/lib/ToneSettings.h \
     network/denonet/lib/command_strings.h \
     network/denonet/lib/global.h \
+    ui/ChannelSlider.h \
     ui_main.h
 
 FORMS += \

@@ -80,6 +80,8 @@ namespace ns_denonet
         ToneSettings getToneSettings() { return toneSettings; }
         bool isSubwooferStereoActive() { return subwooferStereoActive; }
         DimmerState getDimmerState() { return dimState; }
+        ChannelVolumeCompleteInfo getCompleteChannelInfo() { return currentChannel; }
+
         /**
          * @brief getAutoSleepState get AutoSleep-State
          * @param sleepTime if autosleep is active, sleepTime contains the target-Time. Only if return isn't zero
@@ -149,6 +151,7 @@ namespace ns_denonet
         void soundTypeChanged(SoundType t);
         void surroundModeChanged(SurroundMode m);
         void channelVolumeChanged(ChannelVolumeCompleteInfo cvi);
+        void singleChannelChanged(ChannelVolumeData channel);
         void toneControlChanged(ToneSettings ts);
         void subwStereoModeChanged(bool isActive);
         void ecoModeChanged(EcoStates e);

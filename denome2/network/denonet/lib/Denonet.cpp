@@ -670,10 +670,30 @@ void Denonet::newDataAvailable()
                 {
                     // All Channel send
                     tempChannel.finalize();
-                    currentChannel = tempChannel;
-                    tempChannel.clear();
-                    qDebug() << "Channelconfig finalized";
-                    emit channelVolumeChanged(this->currentChannel);
+                    if(currentChannel == tempChannel)
+                    {
+                        //same channel
+                        //did the values change?
+                        for(int i = 0; i < currentChannel.size(); i++)
+                        {
+                            if(abs(currentChannel[i].value - tempChannel[i].value) >= 0.1 )
+                            {
+                                qDebug() << "channel value Changed: " << tempChannel[i].name << " - " << tempChannel[i].value;
+                                emit singleChannelChanged(tempChannel[i]);
+                            }
+                        }
+
+                        currentChannel = tempChannel;
+                        tempChannel.clear();
+
+                    }else{
+
+                        currentChannel = tempChannel;
+                        tempChannel.clear();
+                        qDebug() << "Channelconfig finalized";
+                        emit channelVolumeChanged(this->currentChannel);
+                    }
+
 
                 }else{
 
