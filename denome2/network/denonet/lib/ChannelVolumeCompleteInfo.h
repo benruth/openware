@@ -39,8 +39,8 @@ public:
     int size() { return channel.size(); }
 
     ChannelVolumeData operator[](int index) { return channel.at(index); }
-    ChannelVolumeCompleteInfo &operator=(const ChannelVolumeCompleteInfo& info);
-    bool operator==(const ChannelVolumeCompleteInfo& info);
+    ChannelVolumeCompleteInfo &operator=(const ChannelVolumeCompleteInfo& info); //probably obsolete
+    bool operator==(const ChannelVolumeCompleteInfo& info); //compare only channel-types, not values
 
 private:
     int indexOf(ChannelVolume c);

@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    SavedSettings.cpp \
     main.cpp \
     network/denonet/lib/ChannelVolumeCompleteInfo.cpp \
     network/denonet/lib/Denonet.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
     ui_main.cpp
 
 HEADERS += \
+    SavedSettings.h \
     network/denonet/lib/ChannelVolumeCompleteInfo.h \
     network/denonet/lib/Denonet.h \
     network/denonet/lib/ToneSettings.h \

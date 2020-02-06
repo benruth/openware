@@ -11,6 +11,7 @@
 
 #include "network/denonet/lib/Denonet.h"
 #include "ui/ChannelSlider.h"
+#include "SavedSettings.h"
 
 
 #define DELAY_MS_PER_TICK 200 //ms
@@ -28,8 +29,10 @@ class ui_main : public QMainWindow
     Q_OBJECT
 
 public:
-    ui_main(QWidget *parent = nullptr);
+    ui_main(shared_ptr<SavedSettings> settings, bool darkmode, QWidget *parent = nullptr);
     ~ui_main();
+
+    bool restartRequested() { return restart; }
 
 public slots:
     void onVolumeChanged(double v);
@@ -120,9 +123,13 @@ private slots:
 
     void on_actionChangeChannelView_triggered();
 
+    void on_actionDarkmode_triggered(bool checked);
+
 private:
     Ui::ui_main *ui;
     Denonet com;
+    shared_ptr<SavedSettings> settings;
+
     int maxVolume;
     bool connected;
     double lastVolumeValue;
@@ -130,6 +137,9 @@ private:
     QTimer delayTimer;
 
     bool sleepSetRecently;
+
+    bool restart;
+
 
 
     enum DelayObjects {
@@ -186,8 +196,6 @@ private:
     void uiCreateChannel();
 
     void changeChannelValue(ChannelVolumeData &data);
-
-
 
 
 };

@@ -4,7 +4,9 @@
 #include <QMessageBox>
 #include <QStyleFactory>
 
-ui_main::ui_main(QWidget *parent)
+#include <QSettings>
+
+ui_main::ui_main(shared_ptr<SavedSettings> s, bool darkmode, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ui_main)
     , sleepMinutes{10, 20, 30, 60, 90, 120}
@@ -12,6 +14,10 @@ ui_main::ui_main(QWidget *parent)
 {
     ui->setupUi(this);
     com.init();
+
+    settings = s;
+
+    QVariant var;
 
     /// standard inits
     connected = false;
@@ -26,6 +32,9 @@ ui_main::ui_main(QWidget *parent)
     channelStretchedColumn = -1;
     channelStretchedRow = -1;
 
+    restart = false;
+
+    ui_sliderOrientation = Qt::Horizontal;
 
 
 
@@ -62,7 +71,7 @@ ui_main::ui_main(QWidget *parent)
     ui->actionDimDark->setCheckable(true);
     ui->actionDimBright->setCheckable(true);
 
-
+    ui->actionDarkmode->setChecked(darkmode);
 
 
 
@@ -101,6 +110,7 @@ ui_main::ui_main(QWidget *parent)
 
 
     /// Dockwidget management
+
     // Tone Control Dock
     bool setToneCtrlVisible = false;
     ui->dwSoundSettings->setVisible(setToneCtrlVisible);
@@ -111,7 +121,7 @@ ui_main::ui_main(QWidget *parent)
 
     // Channel-Settings
     ui->dwChannel->setFloating(false);
-    bool setChannelCtrlVisible = true;
+    bool setChannelCtrlVisible = false;
     ui->dwChannel->setVisible(setChannelCtrlVisible);
     ui->actionChannel->setCheckable(true);
     ui->actionChannel->setChecked(setChannelCtrlVisible);
@@ -128,16 +138,38 @@ ui_main::ui_main(QWidget *parent)
     connect(ui->actionBeenden, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(close()));
 
-    /// Connection-Management
-    //ui_hostInputDialog.setParent(this);
-    ui_hostInputDialog.setLabelText("Host-Adresse:");
-    ui_hostInputDialog.setTextValue("192.168.2.39");
-
     connect(ui->actionVerbindung, SIGNAL(triggered()), &ui_hostInputDialog, SLOT(open()));
     connect(&ui_hostInputDialog, SIGNAL(accepted()), this, SLOT(onHostInputDialogEnter()));
 
 
-    ui_sliderOrientation = Qt::Horizontal;
+
+
+
+
+    /// restore saved states
+
+    if(settings->loadSetting(var, "this_geometry"))
+    {
+        this->setGeometry(var.toRect());
+    }
+
+    if(settings->loadSetting(var, "this_state"))
+    {
+        this->restoreState(var.toByteArray());
+    }
+
+
+
+    /// Connection-Management
+    //ui_hostInputDialog.setParent(this);
+    ui_hostInputDialog.setLabelText("Host-Adresse:");
+    QString address = "DenonAVR";
+    if(settings->loadSetting(var, "last_connected"))
+    {
+        address = var.toString();
+        connectDenon(address);
+    }
+    ui_hostInputDialog.setTextValue(address);
 
 }
 
@@ -336,6 +368,8 @@ void ui_main::onHostInputDialogEnter()
     {
         QMessageBox::critical(this, "Fehler", "Verbindung konnte nicht hergstellt werden");
         ui_hostInputDialog.open();
+    }else{
+        settings->saveSetting(input, "last_connected");
     }
 
 }
@@ -438,6 +472,10 @@ void ui_main::closeEvent(QCloseEvent *event)
 
         com.disconnectDenon();
     }
+
+
+    settings->saveSetting(this->saveState(), "this_state");
+    settings->saveSetting(this->geometry(), "this_geometry");
     event->accept();
 }
 
@@ -843,4 +881,20 @@ void ui_main::on_actionChangeChannelView_triggered()
         ui_sliderOrientation = Qt::Vertical;
 
     uiCreateChannel();
+}
+
+void ui_main::on_actionDarkmode_triggered(bool checked)
+{
+    int res = QMessageBox::question(this, "Darkmode",
+                          "Änderung erfordert neustart der Anwendung.\nTrotzdem fortfahren?",
+                          QMessageBox::Yes|QMessageBox::Cancel);
+
+    if( res == QMessageBox::Yes)
+    {
+        settings->saveSetting(checked, "darkmode");
+        restart = true;
+        close();
+    }else{
+        ui->actionDarkmode->setChecked(!checked);
+    }
 }

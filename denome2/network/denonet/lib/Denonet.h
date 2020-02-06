@@ -22,6 +22,8 @@ namespace ns_denonet
         Denonet();
         ~Denonet();
 
+        Denonet(const Denonet& other) = delete;
+
         /**
          * @brief init initiate Socket and Signal-Slots. Call exactly once after instaciation
          * @return 0 - ok; -1 - error
@@ -77,10 +79,10 @@ namespace ns_denonet
         AutoStandby getStandbyState() { return autoStandby; }
         bool isMenuActive() { return menuActive; }
         DRC_Modes getDynamicRangeCompression() { return drcMode; }
-        ToneSettings getToneSettings() { return toneSettings; }
+        const ToneSettings &getToneSettings() { return toneSettings; }
         bool isSubwooferStereoActive() { return subwooferStereoActive; }
         DimmerState getDimmerState() { return dimState; }
-        ChannelVolumeCompleteInfo getCompleteChannelInfo() { return currentChannel; }
+        const ChannelVolumeCompleteInfo &getCompleteChannelInfo() { return currentChannel; }
 
         /**
          * @brief getAutoSleepState get AutoSleep-State

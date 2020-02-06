@@ -80,6 +80,8 @@
             <font>
              <family>Lato</family>
              <pointsize>30</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
             </font>
            </property>
            <property name="text">
@@ -119,7 +121,7 @@
           <widget class="QLabel" name="lbVolumeDb">
            <property name="minimumSize">
             <size>
-             <width>153</width>
+             <width>0</width>
              <height>0</height>
             </size>
            </property>
@@ -267,6 +269,8 @@
     <addaction name="actionChannel"/>
     <addaction name="separator"/>
     <addaction name="actionChangeChannelView"/>
+    <addaction name="separator"/>
+    <addaction name="actionDarkmode"/>
    </widget>
    <addaction name="menuEinstellungen"/>
    <addaction name="menuAnsicht"/>
@@ -658,6 +662,14 @@
   <action name="actionChangeChannelView">
    <property name="text">
     <string>Kanäle: Ansicht drehen</string>
+   </property>
+  </action>
+  <action name="actionDarkmode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Darkmode</string>
    </property>
   </action>
  </widget>
