@@ -53,10 +53,11 @@ ChannelSlider::ChannelSlider(QWidget* parent, QGridLayout* grid, ChannelVolumeDa
     slider->setPageStep(2);
     slider->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    lineEdit->setText("+ 0.0 dB");
+    lineEdit->setText(QString().sprintf("+%4.1f dB", channel.value));
     lineEdit->setMinimumWidth(55);
     lineEdit->setMaximumWidth(65);
     lineEdit->setAlignment(Qt::AlignCenter);
+    lineEdit->setReadOnly(true);
 
 
     layout->addWidget(label, rows[0], cols[0]);

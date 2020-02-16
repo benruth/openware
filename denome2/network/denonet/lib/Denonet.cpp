@@ -3,6 +3,7 @@
 
 #include <QCoreApplication>
 #include <QThread>
+#include <QRegularExpression>
 
 #include "command_strings.h"
 
@@ -22,7 +23,7 @@ Denonet::Denonet() :
     currentSurMode = SurroundMode::MS_STEREO;
     currentInput = SI_AUX1;
     eco = ECO_ON;
-    isMute = false;
+    mute = false;
     sleepActive = false;
     menuActive = false;
     drcMode = DRC_Modes::DRC_OFF;
@@ -32,7 +33,7 @@ Denonet::Denonet() :
 
     statusCommands = "PW?\rMV?\rMS?\rCV?\rPSTONE CTRL ?\rPSBAS ?\rPSTRE ?\rECO?\rSI?\rMU?\rMNMEN?\rPSSWR ?\rSTBY?\rDIM ?\r";
 
-    sender.setInterval(600);
+    sender.setInterval(1000);
     connect(&sender, SIGNAL(timeout()), this, SLOT(senderTimeout()));
     connect(&ping, SIGNAL(timeout()), this, SLOT(onPingTimeout()));
 }
@@ -69,7 +70,7 @@ int Denonet::setMasterVolume(double value)
     if( value > 98.0)
         return -1;
 
-    int absolute = static_cast<int>(round(value*10.0));
+    int absolute = static_cast<int>(value*10.0);
 
 
 
@@ -256,6 +257,7 @@ int Denonet::setToneBass(int value)
 
     if(value < -6)
         return -1;
+
     if(value > 6)
         return -1;
 
@@ -290,13 +292,13 @@ int Denonet::setSubwooferState(bool active)
     return send(c);
 }
 
-int Denonet::setMute(bool mute)
+int Denonet::setMute(bool m)
 {
     if(com == nullptr) throw 1;
 
     QByteArray c("MU");
 
-    if(mute)
+    if(m)
         c.append("ON\r");
     else
         c.append("OFF\r");
@@ -933,6 +935,8 @@ void Denonet::newDataAvailable()
                                 currentSurMode = static_cast<SurroundMode>(i);
                                 emit surroundModeChanged(currentSurMode);
                                 qDebug() << "Surround-Mode changed: " << QString(str_surroundMode_commands[i]);
+
+                                send(QByteArray("CV?\r"), true);
                                 break;
                             }
                         }
@@ -964,11 +968,11 @@ void Denonet::newDataAvailable()
                 c = c.remove(0,2);
                 bool newMute = (c=="ON");
 
-                if(newMute != this->isMute)
+                if(newMute != this->mute)
                 {
                     qDebug() << "Mute changed: " << newMute;
-                    isMute = newMute;
-                    emit muteChanged(isMute);
+                    mute = newMute;
+                    emit muteChanged(mute);
                 }
                 continue;
             }
@@ -1116,14 +1120,13 @@ int Denonet::send(QByteArray commands, bool delayed)
     QList<QByteArray> toSend = commands.split('\r');
     QByteArray c;
 
-
     for(int i = 0; i<toSend.size(); i++)
     {
         c = toSend.at(i);
         if(c.isEmpty())
             continue;
 
-        qDebug() << "=== Send command: " << c;
+        //qDebug() << "=== Send command: " << c;
 
         c += '\r';
 

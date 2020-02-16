@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HelpWizard</class>
+ <widget class="QDialog" name="HelpWizard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>785</width>
+    <height>473</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="handleWidth">
+      <number>10</number>
+     </property>
+     <widget class="QTreeWidget" name="twItems">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="rootIsDecorated">
+       <bool>true</bool>
+      </property>
+      <property name="itemsExpandable">
+       <bool>true</bool>
+      </property>
+      <property name="animated">
+       <bool>true</bool>
+      </property>
+      <property name="headerHidden">
+       <bool>true</bool>
+      </property>
+      <attribute name="headerVisible">
+       <bool>false</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string notr="true">1</string>
+       </property>
+      </column>
+      <item>
+       <property name="text">
+        <string>asd</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>sdd</string>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>asd</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>asdsds</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>asdqwe</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>qwe</string>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>asdd</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QTextBrowser" name="tbInfo">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

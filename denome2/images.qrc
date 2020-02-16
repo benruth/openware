@@ -16,4 +16,15 @@
         <file alias="sleep">images/sleep2.ico</file>
         <file alias="main">images/Double-J-Sound.ico</file>
     </qresource>
+    <qresource prefix="/screens">
+        <file>images/screenshots/connect.jpg</file>
+        <file>images/screenshots/connect_menu.jpg</file>
+        <file>images/screenshots/main.simple.jpg</file>
+        <file>images/screenshots/main_channel.jpg</file>
+        <file>images/screenshots/main_channel_horiz.jpg</file>
+        <file>images/screenshots/main_drag_drop.jpg</file>
+        <file>images/screenshots/main_drag_drop_2.jpg</file>
+        <file>images/screenshots/main_erweitert.jpg</file>
+        <file>images/numpad/Numpad.png</file>
+    </qresource>
 </RCC>

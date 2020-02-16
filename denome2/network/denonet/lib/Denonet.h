@@ -83,6 +83,7 @@ namespace ns_denonet
         bool isSubwooferStereoActive() { return subwooferStereoActive; }
         DimmerState getDimmerState() { return dimState; }
         const ChannelVolumeCompleteInfo &getCompleteChannelInfo() { return currentChannel; }
+        bool isMute() { return mute; }
 
         /**
          * @brief getAutoSleepState get AutoSleep-State
@@ -210,7 +211,7 @@ namespace ns_denonet
         bool subwooferStereoActive;
         EcoStates eco;
         SignalInputs currentInput;
-        bool isMute;
+        bool mute;
         AutoStandby autoStandby;
         bool sleepActive;
         QTime sleepTime;

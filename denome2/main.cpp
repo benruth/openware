@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QStyleFactory>
+#include <QStyle>
 
 #include "SavedSettings.h"
 
@@ -9,6 +10,7 @@ int main(int argc, char *argv[])
 {
     bool rs;
     bool restart;
+
 
     do{
         QApplication a(argc, argv);
@@ -29,10 +31,12 @@ int main(int argc, char *argv[])
 
 
 
-        a.setStyle(QStyleFactory::create("Fusion"));
+
 
         if(darkmode == true)
         {
+            a.setStyle(QStyleFactory::create("Fusion"));
+
 
             QPalette darkPalette = a.palette();
             darkPalette.setColor(QPalette::Window, QColor(53,53,53));

@@ -8,11 +8,13 @@
 #include <QSlider>
 #include <QElapsedTimer>
 #include <QSpacerItem>
+#include <memory>
 
 #include "network/denonet/lib/Denonet.h"
 #include "ui/ChannelSlider.h"
 #include "SavedSettings.h"
-
+#include "ui/InfoDialog.h"
+#include "ui/HelpWizard/helpwizard.h"
 
 #define DELAY_MS_PER_TICK 200 //ms
 #define DELAY_SECONDS(x) (static_cast<int>(x*1000/DELAY_MS_PER_TICK))
@@ -73,10 +75,6 @@ private slots:
 
     void on_hsTreble_actionTriggered(int action);
 
-    void on_gbAudioSettings_clicked(bool checked);
-
-    void on_gbSubwooferSettings_clicked(bool checked);
-
     void on_dial_sliderPressed();
 
     void on_dial_sliderReleased();
@@ -125,15 +123,39 @@ private slots:
 
     void on_actionDarkmode_triggered(bool checked);
 
+    void on_dwSoundSettings_visibilityChanged(bool visible);
+
+    void on_dwChannel_visibilityChanged(bool visible);
+
+    void on_toolbarVisibilityChanged(bool visible);
+
+    void on_actionChannel_triggered(bool checked);
+
+    void on_actionAudio_triggered(bool checked);
+
+    void on_actionUpdate_triggered();
+
+    void on_actionTool_Bar_triggered(bool checked);
+
+    void on_actionHilfe_triggered();
+
+    void on_actionInfo_triggered();
+
+    void on_pbAudioCtrlOn_clicked();
+    void on_pbAudioCtrlOff_clicked();
+    void on_pbSubwooferOn_clicked();
+    void on_pbSubwooferOff_clicked();
+
 private:
     Ui::ui_main *ui;
+    unique_ptr<InfoDialog> infoDialog;
+    unique_ptr<HelpWizard> helpWizard;
     Denonet com;
     shared_ptr<SavedSettings> settings;
 
     int maxVolume;
     bool connected;
     double lastVolumeValue;
-    QElapsedTimer lastVolumeChange;
     QTimer delayTimer;
 
     bool sleepSetRecently;
@@ -146,6 +168,9 @@ private:
         DL_SLEEP_NOTICE,
         DL_SLEEP_SET_TIMER,
 
+        DL_DIAL_TRIGGERED,
+
+
         DELAY_NUMS
     };
     int delayTicks[DELAY_NUMS];
@@ -154,6 +179,12 @@ private:
 
     int sleepSelected;
     int sleepMinutes[6];
+
+
+
+    int channelStretchedRow, channelStretchedColumn;
+    QGridLayout* channelLayout;
+    QList<ChannelSlider*> uiChannelSlider;
 
 
 
@@ -176,10 +207,12 @@ private:
     bool incommingChanges[SLIDER_NUM];
 
 
+    // Functionality
+    bool signalsConnected;
     int connectDenon(QString host);
 
-    void closeEvent(QCloseEvent *event);
 
+    // GUI-Helper
     void enableGui(bool enable);
     void initInputSignals();
 
@@ -188,14 +221,18 @@ private:
     void setSleepSetRecently();
     void resetSleepSetRecently();
 
-
-    int channelStretchedRow, channelStretchedColumn;
-    QGridLayout* channelLayout;
-    QList<ChannelSlider*> uiChannelSlider;
-
     void uiCreateChannel();
-
     void changeChannelValue(ChannelVolumeData &data);
+
+    void changeVolumeDial(double v);
+
+    // overloaded Methodes
+    void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+
+
+
+
 
 
 };
