@@ -14,7 +14,7 @@ Basic-Functions:
 * only German atm. (sorry) But most of the functions should be self-explanatory
 
 <br>
-Official Support for: <br>
+Official Support for
 * AVR/AVC-X6500H
 * ACR-X4500H
 * AVR-X3500H (tested)
