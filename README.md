@@ -1,5 +1,6 @@
 # openware
-open software repo (in working)
+
+open software repo (work in progress)
 
 ## Denome 2
 Remote PC-App for Denon AVRs <br><br>
@@ -23,3 +24,21 @@ Download Sources.<br>
 Open denome2.pro with QtCreator.<br>
 Build the Project.<br>
 That should do the trick.<br>
+
+# License Notice
+Copyright (C) 2020 Benedikt Ruthenberg<br>
+https://github.com/benruth <br>
+<br>
+This program is free software; you can redistribute it and/or<br>
+modify it under the terms of the GNU Lesser General Public<br>
+License as published by the Free Software Foundation; either<br>
+version 3 of the License, or (at your option) any later version.<br>
+<br>
+This program is distributed in the hope that it will be useful,<br>
+but WITHOUT ANY WARRANTY; without even the implied warranty of<br>
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU<br>
+Lesser General Public License for more details.<br>
+<br>
+You should have received a copy of the GNU Lesser General Public License<br>
+along with this program; if not, write to the Free Software Foundation,<br>
+Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<br>
