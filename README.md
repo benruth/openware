@@ -1,9 +1,10 @@
 # openware
 
-open software repo (work in progress)
+Open Software Repository (work in progress)
 
 ## Denome 2
 Remote PC-App for Denon AVRs <br><br>
+
 Basic-Functions:
 * Volume-Control
 * Channel-Control
@@ -11,6 +12,19 @@ Basic-Functions:
 * Tone-Control
 * ... basicaly everything you can do with the standard remote
 * only German atm. (sorry) But most of the functions should be self-explanatory
+
+<br>
+Official Support for: <br>
+* AVR/AVC-X6500H
+* ACR-X4500H
+* AVR-X3500H (tested)
+* AVR-X2500H
+* AVR-S940H
+* AVR-S740H
+* AVR-S640H
+
+<br>
+
 
 ### Installation 
 Download denome2.7z from the release-Directory (https://github.com/benruth/openware/raw/master/release/denome2.7z).<br>
