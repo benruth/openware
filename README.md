@@ -6,23 +6,27 @@ Open Software Repository (work in progress)
 Remote PC-App for Denon AVRs <br><br>
 
 Basic-Functions:
-* Volume-Control
-* Channel-Control
-* Signal-Input
-* Tone-Control
-* ... basicaly everything you can do with the standard remote
-* only German atm. (sorry) But most of the functions should be self-explanatory
+<ul>
+ <li> Volume-Control</li>
+ <li> Channel-Control</li>
+ <li> Signal-Input</li>
+ <li> Tone-Control</li>
+ <li> ... basicaly everything you can do with the standard remote</li>
+ <li> only German atm. (sorry) But most of the functions should be self-explanatory</li>
+</ul>
+
 
 <br>
 Official Support for
-* AVR/AVC-X6500H
-* ACR-X4500H
-* AVR-X3500H (tested)
-* AVR-X2500H
-* AVR-S940H
-* AVR-S740H
-* AVR-S640H
-
+<ul>
+ <li> AVR/AVC-X6500H</li>
+ <li> ACR-X4500H</li>
+ <li>AVR-X3500H (tested)</li>
+ <li> AVR-X2500H</li>
+ <li> AVR-S940H</li>
+ <li> AVR-S740H</li>
+ <li> AVR-S640H</li>
+</ul>
 <br>
 
 
