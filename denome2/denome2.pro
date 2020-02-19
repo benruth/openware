@@ -72,4 +72,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     helpData.qrc \
-    images.qrc
+    images.qrc \
+    translations.qrc

@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QStyleFactory>
 #include <QStyle>
+#include <QTranslator>
 
 #include "SavedSettings.h"
 
@@ -29,6 +30,14 @@ int main(int argc, char *argv[])
 {
     bool rs;
     bool restart;
+    QTranslator tl;
+
+    QStringList languages;
+    QString lang;
+    languages << "Deutsch" << "English";
+
+
+
 
 
     do{
@@ -48,7 +57,26 @@ int main(int argc, char *argv[])
             darkmode = false;
         }
 
+        rs = settings->loadSetting(v, "language");
+        if(rs)
+        {
+            lang = v.toString();
+        }else{
+            lang = QInputDialog::getItem(NULL, "Sprache wählen", "Sprache (Language)", languages);
+            if(lang.isEmpty())
+            {
+                lang = "Deutsch";
+            }
 
+            settings->saveSetting(lang, "language");
+        }
+
+
+        if(lang == "English")
+        {
+            tl.load(":english.qm");
+            a.installTranslator(&tl);
+        }
 
 
 
@@ -109,7 +137,7 @@ int main(int argc, char *argv[])
 
 
 
-        ui_main w(settings, darkmode);
+        ui_main w(settings, darkmode, lang);
         w.show();
         rs = a.exec();
 

@@ -27,9 +27,10 @@
 #include <QCloseEvent>
 
 
-ui_main::ui_main(shared_ptr<SavedSettings> s, bool darkmode, QWidget *parent)
+ui_main::ui_main(shared_ptr<SavedSettings> s, bool darkmode, QString lang, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ui_main)
+    , language(lang)
     , sleepMinutes{10, 20, 30, 60, 90, 120}
     , ui_sleepStatus(this)
 {
@@ -40,7 +41,11 @@ ui_main::ui_main(shared_ptr<SavedSettings> s, bool darkmode, QWidget *parent)
     com.init();
 
     infoDialog = make_unique<InfoDialog>(this);
-    helpWizard = make_unique<HelpWizard>("Denome 2 Hilfe-Dialog", ":/html/help/", this);
+    if(language == "English")
+        helpWizard = make_unique<HelpWizard>(tr("Denome 2 Hilfe-Dialog"), ":/html/help/en/", this);
+    else
+        helpWizard = make_unique<HelpWizard>(tr("Denome 2 Hilfe-Dialog"), ":/html/help/de/", this);
+
 
     settings = s;
 
@@ -128,7 +133,7 @@ ui_main::ui_main(shared_ptr<SavedSettings> s, bool darkmode, QWidget *parent)
     ui->toolBar->addWidget(temp);
 
     QAction* updateAction = ui->actionUpdate;
-    ui->actionUpdate->setToolTip("Aktuellen Status anfragen");
+    ui->actionUpdate->setToolTip(tr("Aktuellen Status anfragen"));
     ui->toolBar->addAction(updateAction);
     ui->toolBar->addSeparator();
 
@@ -194,7 +199,7 @@ ui_main::ui_main(shared_ptr<SavedSettings> s, bool darkmode, QWidget *parent)
 
     /// Connection-Management
     //ui_hostInputDialog.setParent(this);
-    ui_hostInputDialog.setLabelText("Host-Adresse:");
+    ui_hostInputDialog.setLabelText(tr("Host-Adresse:"));
     QString address = "DenonAVR";
     if(settings->loadSetting(var, "last_connected"))
     {
@@ -345,8 +350,8 @@ void ui_main::onSleepSet(int min, QTime time)
     } else {
 
         delayTicks[DL_SLEEP_NOTICE] = 0;
-        ui_sleepStatus.setText(QString().sprintf("Sleep: %d min\n", min) + time.toString("hh:mm"));
-        //ui->statusbar->showMessage(QString().sprintf("Sleep aktiviert: %d Minuten", min), 5000);
+        ui_sleepStatus.setText(QString().asprintf("Sleep: %d min\n", min) + time.toString("hh:mm"));
+        //ui->statusbar->showMessage(QString().asprintf("Sleep aktiviert: %d Minuten", min), 5000);
     }
 
 }
@@ -360,7 +365,7 @@ void ui_main::onSleepCanceled()
 
     resetSleepSetRecently();
 
-    ui->statusbar->showMessage(QString().sprintf("Sleep deaktiviert"), 5000);
+    ui->statusbar->showMessage(tr("Sleep deaktiviert"), 5000);
 }
 
 void ui_main::onDimmerStateChanged(DimmerState d)
@@ -405,7 +410,7 @@ void ui_main::onHostInputDialogEnter()
     qDebug() << "connect to " << input;
     if(connectDenon(input) != 0)
     {
-        QMessageBox::critical(this, "Fehler", "Verbindung konnte nicht hergstellt werden");
+        QMessageBox::critical(this, tr("Fehler"), tr("Verbindung konnte nicht hergstellt werden"));
         ui_hostInputDialog.open();
     }else{
         settings->saveSetting(input, "last_connected");
@@ -559,9 +564,14 @@ void ui_main::keyPressEvent(QKeyEvent *event)
     if(key == Qt::Key_F1)
     {
         if(helpWizard->isFirstStart())
-            helpWizard->show("Allgemein");
-        else
+        {
+            if(language == "English")
+                helpWizard->show("General");
+            else
+                helpWizard->show("Allgemein");
+        } else{
             helpWizard->show();
+        }
         return;
     }
 
@@ -800,12 +810,12 @@ void ui_main::changeVolumeDial(double abs)
                        this, SLOT(on_dial_valueChanged(int)));
 
 
-    ui->lbVolume->setText(QString().sprintf("%4.1f", abs));
+    ui->lbVolume->setText(QString().asprintf("%4.1f", abs));
 
     if(db <= -80.0)
         ui->lbVolumeDb->setText("   ---  ");
     else
-        ui->lbVolumeDb->setText(QString().sprintf("%-04.1f dB", db));
+        ui->lbVolumeDb->setText(QString().asprintf("%-04.1f dB", db));
 
 
     lastVolumeValue = abs;
@@ -814,7 +824,7 @@ void ui_main::changeVolumeDial(double abs)
 
 void ui_main::on_hsBass_valueChanged(int value)
 {
-    ui->leBass->setText(QString().sprintf("%+d dB", value));
+    ui->leBass->setText(QString().asprintf("%+d dB", value));
 
     if(sliderActionTriggered[SL_BASS])
     {
@@ -825,7 +835,7 @@ void ui_main::on_hsBass_valueChanged(int value)
 
 void ui_main::on_hsTreble_valueChanged(int value)
 {
-    ui->leTreble->setText(QString().sprintf("%+d dB", value));
+    ui->leTreble->setText(QString().asprintf("%+d dB", value));
 
     if(sliderActionTriggered[SL_TREBLE])
     {
@@ -837,7 +847,7 @@ void ui_main::on_hsTreble_valueChanged(int value)
 void ui_main::on_hsSubwoofer_valueChanged(int value)
 {
     double db = value/2.0;
-    ui->leLfe->setText(QString().sprintf("%+3.1f dB", db));
+    ui->leLfe->setText(QString().asprintf("%+3.1f dB", db));
 
     if(sliderActionTriggered[SL_SUBWOOFER])
     {
@@ -920,12 +930,12 @@ void ui_main::on_dial_valueChanged(int value)
     }
 
 
-    ui->lbVolume->setText(QString().sprintf("%4.1f", abs));
+    ui->lbVolume->setText(QString().asprintf("%4.1f", abs));
 
     if(db <= -80.0)
         ui->lbVolumeDb->setText("   ---  ");
     else
-        ui->lbVolumeDb->setText(QString().sprintf("%-04.1f dB", db));
+        ui->lbVolumeDb->setText(QString().asprintf("%-04.1f dB", db));
 
 
     com.setMasterVolume(abs);
@@ -998,7 +1008,7 @@ void ui_main::on_actionSleep_triggered()
             // reset sleep timer
             com.setSleep(sleepMinutes[sleepSelected]);
             setSleepSetRecently();
-            ui->statusbar->showMessage("Sleep zurückgesetzt", 5000);
+            ui->statusbar->showMessage(tr("Sleep zurückgesetzt"), 5000);
             return;
         }
     }
@@ -1095,7 +1105,7 @@ void ui_main::on_actionChangeChannelView_triggered()
 void ui_main::on_actionDarkmode_triggered(bool checked)
 {
     int res = QMessageBox::question(this, "Darkmode",
-                          "Änderung erfordert neustart der Anwendung.\nTrotzdem fortfahren?",
+                          tr("Änderung erfordert neustart der Anwendung.\nTrotzdem fortfahren?"),
                           QMessageBox::Yes|QMessageBox::Cancel);
 
     if( res == QMessageBox::Yes)
@@ -1138,53 +1148,53 @@ void ui_main::on_actionUpdate_triggered()
 {
     if(com.sendStatusRequest(StatusRequests::SR_POWER) != 0)
     {
-        QMessageBox::warning(this, "Fehler", "Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden.");
+        QMessageBox::warning(this, tr("Fehler"), tr("Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden."));
         return;
     }
 
     if(com.sendStatusRequest(StatusRequests::SR_VOLUME) != 0)
     {
-        QMessageBox::warning(this, "Fehler", "Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden.");
+        QMessageBox::warning(this, tr("Fehler"), tr("Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden."));
         return;
     }
 
     if(com.sendStatusRequest(StatusRequests::SR_SIGNAL_INPUT) != 0)
     {
-        QMessageBox::warning(this, "Fehler", "Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden.");
+        QMessageBox::warning(this, tr("Fehler"), tr("Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden."));
         return;
     }
 
     if(com.sendStatusRequest(StatusRequests::SR_SUBWOOFER_ACTIVE) != 0)
     {
-        QMessageBox::warning(this, "Fehler", "Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden.");
+        QMessageBox::warning(this, tr("Fehler"), tr("Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden."));
         return;
     }
 
     if(com.sendStatusRequest(StatusRequests::SR_MENU) != 0)
     {
-        QMessageBox::warning(this, "Fehler", "Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden.");
+        QMessageBox::warning(this, tr("Fehler"), tr("Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden."));
         return;
     }
 
     if(com.sendStatusRequest(StatusRequests::SR_ECO) != 0)
     {
-        QMessageBox::warning(this, "Fehler", "Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden.");
+        QMessageBox::warning(this, tr("Fehler"), tr("Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden."));
         return;
     }
 
     if(com.sendStatusRequest(StatusRequests::SR_TONE_CTRL) != 0)
     {
-        QMessageBox::warning(this, "Fehler", "Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden.");
+        QMessageBox::warning(this, tr("Fehler"), tr("Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden."));
         return;
     }
 
     if(com.sendStatusRequest(StatusRequests::SR_CHANNEL_VOL) != 0)
     {
-        QMessageBox::warning(this, "Fehler", "Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden.");
+        QMessageBox::warning(this, tr("Fehler"), tr("Probleme bei der Verbindung zum Device.\nNachricht konnte nicht übermittelt werden."));
         return;
     }
 
-    ui->statusbar->showMessage("Update-Requests erfolgreich gesendet", 5000);
+    ui->statusbar->showMessage(tr("Update-Requests erfolgreich gesendet"), 5000);
 }
 
 void ui_main::on_actionTool_Bar_triggered(bool checked)
@@ -1195,9 +1205,14 @@ void ui_main::on_actionTool_Bar_triggered(bool checked)
 void ui_main::on_actionHilfe_triggered()
 {
     if(helpWizard->isFirstStart())
-        helpWizard->show("Allgemein");
-    else
+    {
+        if(language == "English")
+            helpWizard->show("General");
+        else
+            helpWizard->show("Allgemein");
+    } else{
         helpWizard->show();
+    }
 }
 
 void ui_main::on_actionInfo_triggered()
@@ -1229,4 +1244,22 @@ void ui_main::on_pbSubwooferOff_clicked()
 void ui_main::on_cbSource_activated(int index)
 {
     com.setSignalInput(static_cast<SignalInputs>(index));
+}
+
+void ui_main::on_actionDeutsch_triggered()
+{
+
+    settings->saveSetting("Deutsch", "language");
+
+    restart = true;
+    close();
+}
+
+void ui_main::on_actionEnglish_triggered()
+{
+
+    settings->saveSetting("English", "language");
+
+    restart = true;
+    close();
 }

@@ -247,12 +247,21 @@
      <addaction name="actionDimDark"/>
      <addaction name="actionDimOff"/>
     </widget>
+    <widget class="QMenu" name="menuChange_Language">
+     <property name="title">
+      <string>Change Language</string>
+     </property>
+     <addaction name="actionDeutsch"/>
+     <addaction name="actionEnglish"/>
+    </widget>
     <addaction name="actionVerbindung"/>
     <addaction name="actionUpdate"/>
     <addaction name="separator"/>
     <addaction name="menuSound_Mode"/>
     <addaction name="menuEco"/>
     <addaction name="menuDimmer"/>
+    <addaction name="separator"/>
+    <addaction name="menuChange_Language"/>
     <addaction name="separator"/>
     <addaction name="actionBeenden"/>
    </widget>
@@ -822,6 +831,16 @@
   <action name="actionInfo">
    <property name="text">
     <string>Info</string>
+   </property>
+  </action>
+  <action name="actionDeutsch">
+   <property name="text">
+    <string>Deutsch</string>
+   </property>
+  </action>
+  <action name="actionEnglish">
+   <property name="text">
+    <string>English</string>
    </property>
   </action>
  </widget>

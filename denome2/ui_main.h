@@ -50,7 +50,7 @@ class ui_main : public QMainWindow
     Q_OBJECT
 
 public:
-    ui_main(shared_ptr<SavedSettings> settings, bool darkmode, QWidget *parent = nullptr);
+    ui_main(shared_ptr<SavedSettings> settings, bool darkmode, QString language, QWidget *parent = nullptr);
     ~ui_main();
 
     bool restartRequested() { return restart; }
@@ -167,12 +167,17 @@ private slots:
 
     void on_cbSource_activated(int index);
 
+    void on_actionDeutsch_triggered();
+
+    void on_actionEnglish_triggered();
+
 private:
     Ui::ui_main *ui;
     unique_ptr<InfoDialog> infoDialog;
     unique_ptr<HelpWizard> helpWizard;
     Denonet com;
     shared_ptr<SavedSettings> settings;
+    QString language;
 
     int maxVolume;
     bool connected;

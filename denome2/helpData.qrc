@@ -1,10 +1,15 @@
 <RCC>
     <qresource prefix="/html">
-        <file>help/_10_Allgemein/_10_Allgemein.html</file>
-        <file>help/_10_Allgemein/_20_Oberflaeche.html</file>
-        <file>help/_20_Bedienung/_10_Lautstärke.html</file>
-        <file>help/_20_Bedienung/_20_Menü Navigation.html</file>
-        <file>help/_20_Bedienung/_30_Hinweise.html</file>
+        <file>help/de/_10_Allgemein/_10_Allgemein.html</file>
+        <file>help/de/_10_Allgemein/_20_Oberflaeche.html</file>
+        <file>help/de/_20_Bedienung/_10_Lautstärke.html</file>
+        <file>help/de/_20_Bedienung/_20_Menü Navigation.html</file>
+        <file>help/de/_20_Bedienung/_30_Hinweise.html</file>
+        <file>help/en/_10_General/_10_General.html</file>
+        <file>help/en/_10_General/_20_Interface.html</file>
+        <file>help/en/_20_Manual/_10_Volume.html</file>
+        <file>help/en/_20_Manual/_20_Menu Navigation.html</file>
+        <file>help/en/_20_Manual/_30_Diverse.html</file>
     </qresource>
     <qresource prefix="/Stylesheet">
         <file alias="styles">help/styles.css</file>
