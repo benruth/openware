@@ -12,7 +12,7 @@ Basic-Functions:
  <li> Signal-Input</li>
  <li> Tone-Control</li>
  <li> ... basicaly everything you can do with the standard remote</li>
- <li> only German atm. (sorry) But most of the functions should be self-explanatory</li>
+ <li> Language: German/English</li>
 </ul>
 
 
