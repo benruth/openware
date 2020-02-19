@@ -783,9 +783,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="123.31436"
-     inkscape:cy="231.01038"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="9.0452782"
+     inkscape:cy="232.40263"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      gridtolerance="10000"
@@ -831,7 +831,7 @@
        y="228.34903"
        ry="4.0114756" />
     <circle
-       style="opacity:0.609;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#1dbd00;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path5191"
        cx="1077.5802"
        cy="178.649"

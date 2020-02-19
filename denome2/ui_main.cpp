@@ -1225,3 +1225,8 @@ void ui_main::on_pbSubwooferOff_clicked()
 {
     com.setSubwooferState(false);
 }
+
+void ui_main::on_cbSource_activated(int index)
+{
+    com.setSignalInput(static_cast<SignalInputs>(index));
+}

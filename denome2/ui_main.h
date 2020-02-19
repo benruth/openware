@@ -165,6 +165,8 @@ private slots:
     void on_pbSubwooferOn_clicked();
     void on_pbSubwooferOff_clicked();
 
+    void on_cbSource_activated(int index);
+
 private:
     Ui::ui_main *ui;
     unique_ptr<InfoDialog> infoDialog;
